@@ -1,6 +1,6 @@
-module github.com/sunabozu/binance-order-notificator-go
+module github.com/sunabozu/binance-24hr-price-change-go
 
-go 1.14
+go 1.16
 
 require (
 	github.com/adshao/go-binance v0.0.0-20200615152609-3c91c9175d97
