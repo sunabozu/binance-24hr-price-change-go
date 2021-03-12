@@ -30,7 +30,7 @@ func main() {
 	var drop20, drop15, drop10, drop5 bool = true, true, true, true
 
 	for _ = range ticker.C {
-		stats, err := client.NewListPriceChangeStatsService().Symbol("BTCBUSD").Do(context.Background()) //NewListPricesService().Symbol("BTCUSDT").Do(context.Background())
+		stats, err := client.NewListPriceChangeStatsService().Symbol("BTCBUSD").Do(context.Background())
 
 		if err != nil || len(stats) < 1 {
 			log.Println(err)
