@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"strconv"
@@ -23,22 +24,26 @@ func main() {
 		os.Exit(1)
 	}
 
-	errHandler := func(err error) {
-		log.Printf("error in the handler: %+v", err)
-	}
+	client := binance.NewClient(keys.BinanceKey, keys.BinanceSecret)
 
+	ticker := time.NewTicker(time.Second * 20)
 	var drop20, drop15, drop10, drop5 bool = true, true, true, true
 
-	aggHandler := func(event *binance.WsMarketStatEvent) {
-		change, err := strconv.ParseFloat(event.PriceChange, 64)
-		lastPrice, err := strconv.ParseFloat(event.LastPrice, 64)
+	for _ = range ticker.C {
+		stats, err := client.NewListPriceChangeStatsService().Symbol("BTCBUSD").Do(context.Background()) //NewListPricesService().Symbol("BTCUSDT").Do(context.Background())
 
-		relativeChange := change / lastPrice * 100
+		if err != nil || len(stats) < 1 {
+			log.Println(err)
+			continue
+		}
 
-		log.Print("Relative change: ", relativeChange)
+		// log.Printf("%+v", stats[0])
+
+		relativeChange, err := strconv.ParseFloat(stats[0].PriceChangePercent, 64)
+		log.Print(relativeChange)
 
 		if err != nil {
-			return
+			continue
 		}
 
 		msg := "BTC dropped by "
@@ -56,14 +61,11 @@ func main() {
 			msg += "5%! 🟡🟡🟡"
 			go disableFor24h(&drop5)
 		} else {
-			return
+			continue
 		}
 
 		go utils.SendPushNotification(keys, msg)
 	}
-
-	doneC, _, err := binance.WsMarketStatServe("BTCBUSD", aggHandler, errHandler)
-	log.Printf("a channel: %+v\n error: %+v\n", <-doneC, err)
 }
 
 func disableFor24h(val *bool) {
