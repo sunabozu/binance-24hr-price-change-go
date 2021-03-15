@@ -69,7 +69,7 @@ func main() {
 		}
 
 		// msg += " ($" + stats[0].PriceChange + "), from $" + stats[0].HighPrice + " to $" + stats[0].LastPrice
-		msg += fmt.Sprintf("($ %.0f), from $%.0f to $%.0f", change, highPrice lastPrice)
+		msg += fmt.Sprintf("($ %.0f), from $%.0f to $%.0f", change, highPrice, lastPrice)
 
 		go utils.SendPushNotification(keys, msg)
 	}
