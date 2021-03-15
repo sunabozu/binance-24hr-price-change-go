@@ -43,6 +43,7 @@ func main() {
 		relativeChange, err := strconv.ParseFloat(stats[0].PriceChangePercent, 64)
 		change, err := strconv.ParseFloat(stats[0].PriceChange, 64)
 		lastPrice, err := strconv.ParseFloat(stats[0].LastPrice, 64)
+		highPrice, err := strconv.ParseFloat(stats[0].HighPrice, 64)
 		log.Print(relativeChange)
 
 		if err != nil {
@@ -68,7 +69,7 @@ func main() {
 		}
 
 		// msg += " ($" + stats[0].PriceChange + "), from $" + stats[0].HighPrice + " to $" + stats[0].LastPrice
-		msg += fmt.Sprintf("($ %.0f), from $%.0f to $%.0f", relativeChange, change, lastPrice)
+		msg += fmt.Sprintf("($ %.0f), from $%.0f to $%.0f", change, highPrice lastPrice)
 
 		go utils.SendPushNotification(keys, msg)
 	}
