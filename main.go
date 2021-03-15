@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -40,6 +41,8 @@ func main() {
 		// log.Printf("%+v", stats[0])
 
 		relativeChange, err := strconv.ParseFloat(stats[0].PriceChangePercent, 64)
+		change, err := strconv.ParseFloat(stats[0].PriceChange, 64)
+		lastPrice, err := strconv.ParseFloat(stats[0].LastPrice, 64)
 		log.Print(relativeChange)
 
 		if err != nil {
@@ -64,7 +67,8 @@ func main() {
 			continue
 		}
 
-		msg += " ($" + stats[0].PriceChange + "), from $" + stats[0].HighPrice + " to $" + stats[0].LastPrice
+		// msg += " ($" + stats[0].PriceChange + "), from $" + stats[0].HighPrice + " to $" + stats[0].LastPrice
+		msg += fmt.Sprintf("($ %.0f), from $%.0f to $%.0f", relativeChange, change, lastPrice)
 
 		go utils.SendPushNotification(keys, msg)
 	}
