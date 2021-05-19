@@ -54,7 +54,7 @@ func main() {
 		// log.Print(relativeChange, "%")
 		if relativeChange <= -20.0 && drop20 {
 			msg = "⚫️⚫️⚫️" + msg + "20%"
-			go disableFor24h(&drop15)
+			go disableFor24h(&drop20)
 		} else if relativeChange <= -15.0 && drop15 {
 			msg = "🟣🟣🟣" + msg + "15%"
 			go disableFor24h(&drop15)
